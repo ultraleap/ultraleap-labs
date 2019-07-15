@@ -1,4 +1,7 @@
-# Ultrahaptics Labs Internal
+# Ultrahaptics Labs
 
-Internal version of the open source Ultrahaptics Labs project: https://github.com/ultrahaptics/ultrahaptics-labs
-PLEASE SUBMIT YOUR MERGE REQUESTS HERE, not on GitHub!
+Experimental utilities, applications, prototypes, and other R&D projects.
+
+## Experimental Notice
+
+The contents of this repository are one-time experiments, and are provided as-is; without support from Ultrahaptics.  Use at your own risk.

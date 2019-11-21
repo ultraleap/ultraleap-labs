@@ -1,0 +1,121 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3973867044626942670
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3976390732710353160}
+  - component: {fileID: 3972202724825150126}
+  - component: {fileID: 3973867044626942657}
+  m_Layer: 0
+  m_Name: '[Haptics]'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3976390732710353160
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3973867044626942670}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3972202724825150126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3973867044626942670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eff0326169197cb4a83afb30e594bfe4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _textureObjects:
+  - {fileID: 0}
+  _handScanPosition:
+  - {fileID: 0}
+  - {fileID: 0}
+  _handVelocityThreshold: 0.02
+  _raycastLengthDown: 0.04
+  _raycastLengthUp: 0.04
+  _frequencyCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1.180481
+      outSlope: 1.180481
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.4697587
+    - serializedVersion: 3
+      time: 0.2
+      value: 1
+      inSlope: 11.666284
+      outSlope: 11.666284
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.038092732
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _intensityCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1.180481
+      outSlope: 1.180481
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.4697587
+    - serializedVersion: 3
+      time: 0.2
+      value: 1
+      inSlope: 11.666284
+      outSlope: 11.666284
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.038092732
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _modulateIntensityByHandVelocity: 1
+  _modulateFrequencyByHandVelocity: 0
+  _alwaysOn: 0
+--- !u!114 &3973867044626942657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3973867044626942670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30d7bf71527e2eb4b8622f42ccd715a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HandPositions:
+  - {fileID: 0}
+  - {fileID: 0}
+  _circleRadius: 3.183

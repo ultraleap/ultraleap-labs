@@ -51,12 +51,7 @@ In order explore this project and create your own haptic textures there are some
 1. Download the project and copy it into your relevant workspace. 
 2. Navigate to the appropriate folder in your Unity Hub / Unity Standalone and open the project.
 3. Once open you will see a host of errors, but don't panic. The steps below will address these:
-	- Import the Leap Motion Core Assets Unity package and place it into the 'Assets' folder. When prompted, press "Import".
-	- Next, create a "Plugins" folder, and inside create an Ultrahaptics folder.
-	- Place the following files in the "Plugins" folder (found in the Ultrahaptics SDK installation folder):
-		- UltrahapticsCSharp.NET40.dll (Windows:  C:\Program Files\Ultrahaptics\csharp)
-		- UltrahapticsCSharp.dll (Windows:  C:\Program Files\Ultrahaptics\csharp)
-		- libusb.dll (Windows: C:\Program Files\Ultrahaptics\bin)
+	- Import the Leap Motion Core Assets Unity package, and the Ultrahaptics Unity package into the project (found in your Ultrahaptics SDK folder). When prompted, press "Import".
 4. The project should now be ready to use!
 	- **TIP:** *It is worth double checking that the LeapHandController Gameobject in the scene contains the HandData.cs script found in: /Assets/Scripts/HandData*
 
@@ -66,7 +61,7 @@ The following describes how to set up a new scene in a similar fashion to our de
 1. Add the Leap Hand Controller prefab to the scene (Assets/LeapMotion/Prefabs/Misc/LeapHandController) and set it up per your preference.
 2. Add the HandData script to the Leap Hand Controller game object.
 3. Add the [Haptics] prefab to the scene (Assets/Prefabs/[Haptics])
-4. On [Haptics], set the amount of hands you require in the scene, 2 for Left and Right. Set the Chirality of each of these accordingly. Then assign the "ScanPosition" (we currently use bone2 of the middle finger on the left hand and right hand).
+4. On [Haptics], set the amount of hands you require in the scene, 2 for Left and Right. Set the Chirality of each of these accordingly.Then assign the "ScanPosition" (we currently use bone2 of the middle finger on the left hand and right hand).
 5. Setup the HapticRunner Hand Positions in the in the same manner.
      - **TIP:** *Scan position in Haptic Renderer is the position on the hand where we raycast from onto the texture, in order to find the displacement. Hand Positions in Haptic Runner are where we then project the haptic feedback. Feel free to change and experiment with these values!*
 6. Add the model you want to apply textures into the scene. 

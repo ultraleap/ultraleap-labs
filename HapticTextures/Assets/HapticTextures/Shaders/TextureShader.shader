@@ -11,7 +11,7 @@
             _Color ("Color", color) = (1,1,1,0)
             _Metallic ("Metallic", Range(0, 1)) = 0.5
             _Glossiness ("Smoothness", Range(0, 1)) = 0.5
-			_HapticSmoothness ("Haptic Smoothness", Range(20,80)) = 100
+			_HapticSmoothness ("Haptic Smoothness", Range(20,80)) = 50
 			_HapticIntensityMinimum ("Haptic Intensity Minimum", Range(0.5, 1)) = 0.6
 			_HapticIntensityMaximum ("Haptic Intensity Maximum", Range(0.5, 1)) = 1
         }

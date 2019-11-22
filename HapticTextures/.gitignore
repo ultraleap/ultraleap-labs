@@ -54,5 +54,8 @@ crashlytics-build.properties
 [Aa]ssets/**/Generated/*.shader
 [Aa]ssets/LeapMotion/*
 [Aa]ssets/LeapMotion.meta
-[Aa]ssets/Plugins/Ultrahaptics/*
-[Aa]ssets/Plugins/Ultrahaptics.meta
+
+[Aa]ssets/Plugins/UltrahapticsCSharp.NET35.dll*
+[Aa]ssets/Plugins/x86_64/libusb-1.0.dll*
+[Aa]ssets/Plugins/x86_64/Ultrahaptics.dll*
+[Aa]ssets/Plugins/x86_64/UltrahapticsCSharp.dll*

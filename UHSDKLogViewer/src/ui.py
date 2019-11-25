@@ -53,7 +53,7 @@ class UHSDKLogViewer(QWidget):
             intensity = pts[:,3]
             color = np.ones((pts.shape[0], 4))
             color[:,3] = intensity
-            self.plot3D._plot.setData(pos=pts[:,0:3], color = color)
+            self.plot3D._plot.setData(pos=pts[:,0:3], color=color, size=10*intensity)
 
     def setControlPointsFromFromRegexMatch(self, match):
         if (match):

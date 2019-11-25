@@ -60,13 +60,9 @@ class MainWindow(QMainWindow):
         self.processingSDKLog = False
         self.my_env = None
 
-        layout = QHBoxLayout()
-
         self.bookmarksManager = BookmarksManager()
-
         self.items = QDockWidget("Bookmarks", self)
         self.bookmarkListWidget = QListWidget()
-
         self.bookmarkListWidget.itemDoubleClicked.connect(self.bookmarkDoubleClicked)
         self.items.setWidget(self.bookmarkListWidget)
         self.items.setFloating(False)
@@ -76,20 +72,27 @@ class MainWindow(QMainWindow):
         self.addDockWidget(Qt.RightDockWidgetArea, self.items)
 
         # MenuBar actions
-        #bar = self.menuBar()
-        #file = bar.addMenu("File")
-        self.openProcessAction = QAction("Open Process", self)
-        self.openProcessAction.triggered.connect(self.launchProcessFromFileDialog)
-        self.openProcessAction.setShortcut("Ctrl+O")
         QApplication.setAttribute(Qt.AA_DontUseNativeMenuBar)
+        self.openProcessAction = QAction("Open Process", self)
+        self.openProcessAction.setShortcut("Ctrl+O")
+        self.openProcessAction.triggered.connect(self.launchProcessFromFileDialog)
 
         self.clearBookmarksAction = QAction("Clear Bookmarks", self)
-        self.clearBookmarksAction.triggered.connect(self.clearBookmarksAndUpdate)
         self.clearBookmarksAction.setShortcut("Ctrl+X")
+        self.clearBookmarksAction.triggered.connect(self.clearBookmarksAndUpdate)
 
         self.exitAction = QAction("Shutdown", self)
         self.exitAction.setShortcut("Esc")
         self.exitAction.triggered.connect(self.shutDown)
+
+        self.quit_action = QAction("Exit", self)
+        self.quit_action.triggered.connect(self.shutDown)
+
+        self.toggleVisualiser_action = QAction("Hide Visualiser", self)
+        self.toggleVisualiser_action.triggered.connect(self.toggleVisualiserShown)
+
+        self.server_enableDisable_action = QAction("Enable Web Socket", self)
+        self.server_enableDisable_action.triggered.connect(self.toggleWebSocketEnabled)
 
         # Init QSystemTrayIcon
         self.tray_icon = QSystemTrayIcon(self)
@@ -98,24 +101,14 @@ class MainWindow(QMainWindow):
         else:
             iconPath = ":/icons/uh_tray.png"
         self.tray_icon.setIcon(QIcon(iconPath))
-
         self.setWindowIcon(QIcon(":/icons/uh_tray.png"))
-
-        quit_action = QAction("Exit", self)
-        self.toggleVisualiser_action = QAction("Hide Visualiser", self)
-        self.server_enableDisable_action = QAction("Enable Web Socket", self)
-
-        self.toggleVisualiser_action.triggered.connect(self.toggleVisualiserShown)
-        self.server_enableDisable_action.triggered.connect(self.toggleWebSocketEnabled)
-
-        quit_action.triggered.connect(self.shutDown)
 
         tray_menu = QMenu()
         tray_menu.addAction(self.openProcessAction)
         tray_menu.addAction(self.toggleVisualiser_action)
         tray_menu.addAction(self.server_enableDisable_action)
         tray_menu.addAction(self.clearBookmarksAction)
-        tray_menu.addAction(quit_action)
+        tray_menu.addAction(self.quit_action)
         self.tray_icon.setContextMenu(tray_menu)
         self.tray_icon.show()                
 

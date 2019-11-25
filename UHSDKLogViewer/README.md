@@ -29,3 +29,20 @@ $ pip3 install --user pyqt5 pyqtgraph numpy PyOpenGL atom
 ```
 $ pip3 install --user pypiwin32
 ```
+
+Building:
+-------------
+To build an executable (with all Python/Libraries bundled), you can use pyinstaller.
+
+```
+$ pip3 install pyinstaller
+```
+Then to build, cd into the src/ directory and run:
+```
+macOS:
+$ pyinstaller -F -w UHSDKLogViewer.py -i ../icons/icon.icns
+
+Windows:
+$ pyinstaller.exe -F -w UHSDKLogViewer.py -i ../icons/icon.ico
+
+```

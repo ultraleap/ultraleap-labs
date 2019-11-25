@@ -23,7 +23,7 @@ Dependencies:
   The recommended way to install these via pip (for Python 3)
   To install with pip3 run this command:
 ```
-$ pip3 install --user pyqt5 pyqtgraph numpy PyOpenGL atom
+$ pip3 install --user pyqt5 pyqtgraph numpy PyOpenGL atom SimpleWebSocketServer
 ```
 3. Windows only will also require: 
 ```

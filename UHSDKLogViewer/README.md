@@ -19,11 +19,11 @@ Alternatively, run the compiled applications in the [Executables](https://github
 Dependencies:
 -------------
 1. Python 3.7.x (http://python.org)
-2. The following Python modules are required: pyqt5, pyqtgraph, numpy, PyOpenGL, atom
+2. The following Python modules are required: pyqt5, pyqtgraph, numpy, PyOpenGL, atom, SimpleWebSocketServe, qtmodern
   The recommended way to install these via pip (for Python 3)
   To install with pip3 run this command:
 ```
-$ pip3 install --user pyqt5 pyqtgraph numpy PyOpenGL atom SimpleWebSocketServer
+$ pip3 install --user pyqt5 pyqtgraph numpy PyOpenGL atom SimpleWebSocketServe qtmodern
 ```
 3. Windows only will also require: 
 ```
@@ -46,3 +46,14 @@ Windows:
 $ pyinstaller.exe -F -w UHSDKLogViewer.py -i ../icons/icon.ico
 
 ```
+
+Note: if you're having issues with paths for qtmodern, try running this:
+
+```
+from PyInstaller.utils.hooks import collect_data_files
+qtmodern_datas = collect_data_files('qtmodern')
+
+print(qtmodern_datas)
+```
+
+And copy these paths into 'datas' of a.Analysis, of the podspec, then use the .podspec file to build.

@@ -5,7 +5,7 @@
 # -The following Python modules are required: pyqt5, pyqtgraph, numpy, PyOpenGL, atom
 #   The recommended way to install these via pip (for Python 3)
 #   To install with pip3 run this command:
-#     $ pip3 install --user pyqt5 pyqtgraph numpy PyOpenGL atom SimpleWebSocketServer
+#     $ pip3 install pyqt5 pyqtgraph numpy PyOpenGL atom SimpleWebSocketServer qtmodern
 # On Windows, pywin32 is also required.
 import sys
 import os
@@ -15,6 +15,11 @@ import argparse
 import platform
 from subprocess import Popen
 import json
+
+# To apply dark style and modern window appearance
+import qtmodern
+from qtmodern.styles import dark as darkMode
+import qtmodern.windows
 
 from pybuild import setupPyInstallerBuild
 setupPyInstallerBuild()
@@ -34,9 +39,9 @@ try:
 except Exception as e:
     print("Exception on thirdparty import: " + str(e))
     if IS_WINDOWS:
-        print("*** WARNING: Unable to import dependencies. Please install via:\n\n pip3 install --user pyqt5 pyqtgraph numpy PyOpenGL atom SimpleWebSocketServer pywin32\n")
+        print("*** WARNING: Unable to import dependencies. Please install via:\n\n pip3 install --user pyqt5 pyqtgraph numpy PyOpenGL atom SimpleWebSocketServer qtmodern pywin32\n")
     else:
-        print("*** WARNING: Unable to import dependencies. Please install via:\n\n pip3 install --user pyqt5 pyqtgraph numpy PyOpenGL atom SimpleWebSocketServer\n")
+        print("*** WARNING: Unable to import dependencies. Please install via:\n\n pip3 install --user pyqt5 pyqtgraph numpy PyOpenGL atom SimpleWebSocketServe qtmodern\n")
 
 # For Qt qrc file loading of resources
 import resources
@@ -53,12 +58,18 @@ class MainWindow(QMainWindow):
         self.executable_process = None
 
         # An Optional WebSocket, to serve control point data
-        self.server = None
-
-        self.serverActive = False
+        self.webSocket = None
+        self.webSocketActive = False
 
         self.processingSDKLog = False
         self.my_env = None
+
+        self.statusBar = QStatusBar()
+        self.openProcessButton = QPushButton("")
+        self.openProcessButton.setIcon(QIcon(":/icons/open.png"))
+        self.openProcessButton.setToolTip("Open Process")
+        self.statusBar.addWidget(self.openProcessButton)
+        self.setStatusBar(self.statusBar)
 
         self.bookmarksManager = BookmarksManager()
         self.items = QDockWidget("Bookmarks", self)
@@ -69,13 +80,14 @@ class MainWindow(QMainWindow):
 
         self.viewer = UHSDKLogViewer(exe_path=exe_path, auto_launch=auto_launch)
         self.setCentralWidget(self.viewer)
-        self.addDockWidget(Qt.RightDockWidgetArea, self.items)
+        self.addDockWidget(Qt.BottomDockWidgetArea, self.items)
 
         # MenuBar actions
-        QApplication.setAttribute(Qt.AA_DontUseNativeMenuBar)
         self.openProcessAction = QAction("Open Process", self)
         self.openProcessAction.setShortcut("Ctrl+O")
         self.openProcessAction.triggered.connect(self.launchProcessFromFileDialog)
+        
+        self.openProcessButton.clicked.connect(self.launchProcessFromFileDialog)       
 
         self.clearBookmarksAction = QAction("Clear Bookmarks", self)
         self.clearBookmarksAction.setShortcut("Ctrl+X")
@@ -91,8 +103,8 @@ class MainWindow(QMainWindow):
         self.toggleVisualiser_action = QAction("Hide Visualiser", self)
         self.toggleVisualiser_action.triggered.connect(self.toggleVisualiserShown)
 
-        self.server_enableDisable_action = QAction("Enable Web Socket", self)
-        self.server_enableDisable_action.triggered.connect(self.toggleWebSocketEnabled)
+        self.webSocket_enableDisable_action = QAction("Enable Web Socket", self)
+        self.webSocket_enableDisable_action.triggered.connect(self.toggleWebSocketEnabled)
 
         # Init QSystemTrayIcon
         self.tray_icon = QSystemTrayIcon(self)
@@ -106,7 +118,7 @@ class MainWindow(QMainWindow):
         tray_menu = QMenu()
         tray_menu.addAction(self.openProcessAction)
         tray_menu.addAction(self.toggleVisualiser_action)
-        tray_menu.addAction(self.server_enableDisable_action)
+        tray_menu.addAction(self.webSocket_enableDisable_action)
         tray_menu.addAction(self.clearBookmarksAction)
         tray_menu.addAction(self.quit_action)
         self.tray_icon.setContextMenu(tray_menu)
@@ -123,6 +135,10 @@ class MainWindow(QMainWindow):
         # Setup the bookmarks list
         self.updateBookmarkList()
 
+    def logMessage(self, msg):
+        print(msg)
+        self.statusBar.showMessage(msg, 2000)
+
     def toggleVisualiserShown(self):
         if self.isHidden():
             self.show()
@@ -133,7 +149,7 @@ class MainWindow(QMainWindow):
 
     def launchProcessFromFileDialog(self):
         dialog = QFileDialog()
-        fname = dialog.getOpenFileName(None, 'Select Executable to Monitor', '.', '*',    '*', QFileDialog.DontUseNativeDialog)
+        fname = dialog.getOpenFileName(None, 'Open Ultrahaptics Process', '.', '*',    '*', QFileDialog.DontUseNativeDialog)
         if os.path.isfile(fname[0]):
             if self.executable_process:
                 self.killMonitoredProcess()
@@ -166,7 +182,7 @@ class MainWindow(QMainWindow):
         if self.executable_process:
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Information)
-            msg.setText("Preparing to close.")
+            msg.setText("Closing...")
             msg.setInformativeText("Do you want to kill your monitored process?")
             msg.setWindowTitle("Quit")
             msg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
@@ -183,10 +199,10 @@ class MainWindow(QMainWindow):
         return QMainWindow.closeEvent(self, event)
 
     def launchExecutable(self, ask=False):
-        print("Launching: %s" % (self.exePath))
+        self.logMessage("Launching: %s" % (self.exePath))
 
         if not os.path.isfile(self.exePath):
-            print("WARNING: Unable to launch: (%s) - check path exists and is executable" % self.exePath)
+            self.logMessage("WARNING: Unable to launch: (%s) - check path exists and is executable" % self.exePath)
             return
 
         exe_root = os.path.dirname(self.exePath)
@@ -206,7 +222,7 @@ class MainWindow(QMainWindow):
                 try:
                     self.executable_process = Popen([self.exePath], env=self.my_env, cwd=exe_root)
                 except:
-                    print("Unable to kill the process: " + str(self.exePath))            
+                    self.logMessage("Unable to kill the process: " + str(self.exePath))            
 
     def setEnvironmentForLogging(self):
         self.logHandler = SDKLogPipeHandler(is_windows=IS_WINDOWS)
@@ -221,7 +237,7 @@ class MainWindow(QMainWindow):
 
     # For serving control point data over websocket
     def serveControlPoints(self, data):
-        if self.serverActive:
+        if self.webSocketActive:
             for client in get_clients():
                 if data:
                     msg = json.dumps({'x': data[1], 'y': data[2], 'z': data[3]})
@@ -253,7 +269,7 @@ class MainWindow(QMainWindow):
                 continue
 
             if len(data)<2:
-                print("No valid Pipe data available")
+                self.logMessage("No valid Pipe data available")
                 continue
 
             lines = str(data[1], "utf-8").split(os.linesep)
@@ -280,38 +296,38 @@ class MainWindow(QMainWindow):
             self.log_reader_thread.join()
 
     def toggleWebSocketEnabled(self):
-        if not self.serverActive:
+        if not self.webSocketActive:
             self.startWebSocketServerThread()
         else:
             self.stopWebSocketServerThread()
 
     def startWebSocketServerThread(self):
-        print("Starting Server")
+        self.logMessage("Starting WebSocket Server")
         try:
             if not socketIsOpen():
-                self.server = createWebSocketServer()
-                self.serverThread = threading.Thread(target=self.server.serveforever)
-                self.serverThread.daemon = True
-                self.serverThread.start()
-                self.serverActive = True
+                self.webSocket = createWebSocketServer()
+                self.webSocketThread = threading.Thread(target=self.webSocket.serveforever)
+                self.webSocketThread.daemon = True
+                self.webSocketThread.start()
+                self.webSocketActive = True
             else:
-                print("SOCKET PORT ALREADY OPEN.")
-                self.serverActive = True
-            self.server_enableDisable_action.setText("Disable Web Socket")
+                self.logMessage("SOCKET PORT ALREADY OPEN.")
+                self.webSocketActive = True
+            self.webSocket_enableDisable_action.setText("Disable Web Socket")
         except Exception as e:
             print(e)
 
 
     def stopWebSocketServerThread(self):
-        print("Stopping Server")
-        if self.server:
+        self.logMessage("Stopping Server")
+        if self.webSocket:
             try:
                 # TODO: Reliably close the Socket
-                self.serverThread.join(0.25)
+                self.webSocketThread.join(0.25)
             except Exception as e:
                 print("Closing, exception:" + str(e))                
-            self.serverActive = False
-            self.server_enableDisable_action.setText("Enable Web Socket")
+            self.webSocketActive = False
+            self.webSocket_enableDisable_action.setText("Enable Web Socket")
 
     def toggleProcessingLog(self):
         self.processingSDKLog = not self.processingSDKLog
@@ -324,9 +340,9 @@ class MainWindow(QMainWindow):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
 
-    app.setOrganizationName("Ultrahaptics");
-    app.setOrganizationDomain("com.ultrahaptics");
-    app.setApplicationName("Ultrahaptics Visualiser");
+    app.setOrganizationName("Ultraleap");
+    app.setOrganizationDomain("com.ultraleap");
+    app.setApplicationName("Ultraleap Visualiser");
     app.setQuitOnLastWindowClosed(False)
 
     parser = argparse.ArgumentParser(usage="-e <executable path> -a <add to automatically launch the executable>")
@@ -338,6 +354,8 @@ if __name__ == '__main__':
     autoLaunch = args.autoLaunch
     
     ex = MainWindow(exe_path = exePath, auto_launch = autoLaunch)
-    ex.setWindowTitle("Ultrahaptics Visualiser")
-    ex.show()
+    darkMode(app)
+    mw = qtmodern.windows.ModernWindow(ex)
+    mw.setWindowTitle("Ultraleap Visualiser")
+    mw.show()
     sys.exit(app.exec_())

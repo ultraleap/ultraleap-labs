@@ -355,7 +355,13 @@ if __name__ == '__main__':
     
     ex = MainWindow(exe_path = exePath, auto_launch = autoLaunch)
     darkMode(app)
-    mw = qtmodern.windows.ModernWindow(ex)
-    mw.setWindowTitle("Ultraleap Visualiser")
-    mw.show()
+
+    # TODO: Understand why qtmodern.ModernWindow renders differently on macOS/Windows
+    if not IS_WINDOWS:
+        mw = qtmodern.windows.ModernWindow(ex)
+        mw.setWindowTitle("Ultraleap Visualiser")
+        mw.show()
+    else:
+        ex.setWindowTitle("Ultraleap Visualiser")
+        ex.show()
     sys.exit(app.exec_())

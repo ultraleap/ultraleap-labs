@@ -25,11 +25,11 @@ class UHSDKLogViewer(QWidget):
         self.painterThreadTimer.timeout.connect(self.updatePlot)
         self.painterThreadTimer.start()
 
-        pos = np.random.random(size=(512*256,3))
-        pos *= [10,-10,10]
+        pos = np.random.random(size=(32*6,3))
+        pos *= [1,-1,1]
         d2 = (pos**2).sum(axis=1)**0.5
         pos[:, 2] = d2
-        color = [0, 1, 0, 0.5]
+        color = [0, 207.0/255.0, 117.0/255.0, 0.5]
         size = 10
 
         self.plot3D = Scatter3DPlot(pos=pos, size=size, color=color)
@@ -41,6 +41,7 @@ class UHSDKLogViewer(QWidget):
 
         # Build UI
         self.createUI()
+ 
 
     def createUI(self):
         mainLayout = QVBoxLayout()

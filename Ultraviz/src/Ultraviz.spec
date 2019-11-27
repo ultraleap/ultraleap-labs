@@ -3,8 +3,8 @@
 block_cipher = None
 
 
-a = Analysis(['UHSDKLogViewer.py'],
-             pathex=['/Users/antony.nasce/workspace/ultrahaptics-labs-internal/UHSDKLogViewer/src'],
+a = Analysis(['Ultraviz.py'],
+             pathex=['/Users/antony.nasce/workspace/ultrahaptics-labs-internal/Ultraviz/src'],
              binaries=[],
              datas=[('/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/qtmodern/resources/frameless.qss', 'qtmodern/resources'), ('/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/qtmodern/resources/style.qss', 'qtmodern/resources')],
              hiddenimports=[],
@@ -23,7 +23,7 @@ exe = EXE(pyz,
           a.zipfiles,
           a.datas,
           [],
-          name='UHSDKLogViewer',
+          name='Ultraviz',
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,
@@ -32,6 +32,6 @@ exe = EXE(pyz,
           runtime_tmpdir=None,
           console=False , icon='../icons/icon.icns')
 app = BUNDLE(exe,
-             name='UHSDKLogViewer.app',
+             name='Ultraviz.app',
              icon='../icons/icon.icns',
              bundle_identifier=None)

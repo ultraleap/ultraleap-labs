@@ -12,7 +12,7 @@ Based on GLScatterPlotItem.py example from PyQtGraph
 License: MIT
 ----------------------------------------------------------
 """
-from PyQt5 import QtCore
+from PyQt5 import QtCore, Qt
 import pyqtgraph.opengl as gl
 import numpy as np
 import pyqtgraph as pg
@@ -49,10 +49,19 @@ class MyGLViewWidget(gl.GLViewWidget):
                 x = ev.pos().x() - self.width() / 2
                 y = ev.pos().y() - self.height() / 2
                 self.pan(-x, -y, 0, relative=True)
-                print(self.opts['center'])
         self._prev_zoom_pos = None
         self._prev_pan_pos = None
         self.sigUpdate.emit()
+
+    def keyPressEvent(self, ev):
+
+        # D-key for "DEFAULT"
+        if ev.key() == 68:
+            print(str(self.parent().scene3D.setCameraPresetByName("DEFAULT")))
+
+        # T-key for "TOP"
+        if ev.key() == 84:
+            print(str(self.parent().scene3D.setCameraPresetByName("TOP")))
 
     def width(self):
         return super().width() * self.devicePixelRatio()
@@ -101,16 +110,13 @@ class Scatter3DPlot(Atom):
     
     #: (N,4) array of floats (0.0-1.0) specifying pot colors 
     #: OR a tuple of floats specifying a single color for all spots.
-    color = Value([1.0, 1.0, 1.0, 0.5])
+    color = Value([])
     
     #: (N,) array of floats specifying spot sizes or a value for all spots.
-    size = Value(5)
+    size = Value()
     
      #: GLScatterPlotIem instance.
     _plot = Value()
-    
-    def _default_pos(self):
-        return np.random.random(size=(512 * 256, 3))
     
     def _default__plot(self):
         """ Create a GLScatterPlot item with our current attributes.
@@ -127,7 +133,7 @@ class Scatter3DPlot(Atom):
         kwargs = {change['name']: change['value']}
         self._plot.setData(**kwargs)
 
-        
+      
 class Scatter3DScene(Atom):
     """ A Scatter3D Scene Manager.
     
@@ -171,6 +177,19 @@ class Scatter3DScene(Atom):
     bgcolor = Value()
     #: viewport - unused?
     viewport = Value()
+
+    # Can be triggered with Keypresses 
+    CAMERA_PRESETS = {'DEFAULT': {'center' : pg.Vector(0, 0, 0),
+                              'distance'   : 7.,
+                              'fov'        : 60.,
+                              'elevation'  : 40.,
+                              'azimuth'    : -90.0},
+                     'TOP': {'center'      : pg.Vector(0, 0, 0),
+                              'distance'   : 7.,
+                              'fov'        : 60.,
+                              'elevation'  : 90.,
+                              'azimuth'    : -90.0}
+                    }
     
     def _default__widget(self, parent=None):
         """ Create a GLViewWidget and add plot, grid, and orientation axes.
@@ -218,7 +237,17 @@ class Scatter3DScene(Atom):
         if self._guard & (VIEW_SYNC_FLAG) or change['type'] == 'create':
             return
         self._widget.opts[change['name']] = change['value']
-        self._widget.update()
+        self._widget.update()      
+
+    def setCameraPresetByName(self, name):
+        if name in self.CAMERA_PRESETS.keys():
+            preset = self.CAMERA_PRESETS[name]
+            for key in preset.keys():
+                self.center = preset['center']
+                self.distance = preset['distance']
+                self.fov = preset['fov']
+                self.elevation = preset['elevation']
+                self.azimuth = preset['azimuth']
     
     def _update_model(self):
         """ Synchronize view attributes to the model.

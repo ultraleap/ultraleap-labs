@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-# An SDK Log visualiser built with PyQt which plots control points in 3D space
+# Ultraviz - An Ultrahaptics Contorl Point Visualizer built with PyQt which plots control points in 3D space
 # Dependencies:
 # -Python 3.7.x (http://python.org)
-# -The following Python modules are required: pyqt5, pyqtgraph, numpy, PyOpenGL, atom
+# -The following Python modules are required: pyqt5 pyqtgraph numpy PyOpenGL atom SimpleWebSocketServer qtmodern
 #   The recommended way to install these via pip (for Python 3)
 #   To install with pip3 run this command:
 #     $ pip3 install pyqt5 pyqtgraph numpy PyOpenGL atom SimpleWebSocketServer qtmodern
@@ -100,8 +100,8 @@ class MainWindow(QMainWindow):
         self.quit_action = QAction("Exit", self)
         self.quit_action.triggered.connect(self.shutDown)
 
-        self.toggleVisualiser_action = QAction("Hide Visualiser", self)
-        self.toggleVisualiser_action.triggered.connect(self.toggleVisualiserShown)
+        self.toggleVisualizer_action = QAction("Hide Visualizer", self)
+        self.toggleVisualizer_action.triggered.connect(self.toggleVisualizerShown)
 
         self.webSocket_enableDisable_action = QAction("Enable Web Socket", self)
         self.webSocket_enableDisable_action.triggered.connect(self.toggleWebSocketEnabled)
@@ -117,7 +117,7 @@ class MainWindow(QMainWindow):
 
         tray_menu = QMenu()
         tray_menu.addAction(self.openProcessAction)
-        tray_menu.addAction(self.toggleVisualiser_action)
+        tray_menu.addAction(self.toggleVisualizer_action)
         tray_menu.addAction(self.webSocket_enableDisable_action)
         tray_menu.addAction(self.clearBookmarksAction)
         tray_menu.addAction(self.quit_action)
@@ -139,13 +139,13 @@ class MainWindow(QMainWindow):
         print(msg)
         self.statusBar.showMessage(msg, 2000)
 
-    def toggleVisualiserShown(self):
+    def toggleVisualizerShown(self):
         if self.isHidden():
             self.show()
-            self.toggleVisualiser_action.setText("Hide Visualiser")
+            self.toggleVisualizer_action.setText("Hide Visualizer")
         else:
             self.hide()
-            self.toggleVisualiser_action.setText("Show Visualiser")
+            self.toggleVisualizer_action.setText("Show Visualizer")
 
     def launchProcessFromFileDialog(self):
         dialog = QFileDialog()
@@ -342,7 +342,7 @@ if __name__ == '__main__':
 
     app.setOrganizationName("Ultraleap");
     app.setOrganizationDomain("com.ultraleap");
-    app.setApplicationName("Ultraleap Visualiser");
+    app.setApplicationName("Ultraleap Visualizer");
     app.setQuitOnLastWindowClosed(False)
 
     parser = argparse.ArgumentParser(usage="-e <executable path> -a <add to automatically launch the executable>")
@@ -359,9 +359,9 @@ if __name__ == '__main__':
     # TODO: Understand why qtmodern.ModernWindow renders differently on macOS/Windows
     if not IS_WINDOWS:
         mw = qtmodern.windows.ModernWindow(ex)
-        mw.setWindowTitle("Ultraleap Visualiser")
+        mw.setWindowTitle("Ultraviz")
         mw.show()
     else:
-        ex.setWindowTitle("Ultraleap Visualiser")
+        ex.setWindowTitle("Ultraviz")
         ex.show()
     sys.exit(app.exec_())

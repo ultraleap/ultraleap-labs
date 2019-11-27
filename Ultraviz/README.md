@@ -1,20 +1,21 @@
-UHSDKLogViewer 
+Ultraviz 
 --------------
-An SDK Log visualiser built with PyQt which plots control points in 3D space
+An Ultrahaptics SDK Log visualizer built with PyQt which plots control points in 3D space
 
 ![](icons/visualiser.gif)
 
 
 Usage:
 -------
-1. Ensure that this file (UHSDKLogViewer.py) is executable by settings its permissions:
-```$ chmod +x UHSDKLogViewer.py``` 
+1. Ensure that this file (Ultraviz.py) is executable by settings its permissions:
+```$ chmod +x Ultraviz.py``` 
 2. Run with -e (--exePath) flag from the command line, to launch an Ultrahaptics executable you wish to monitor
+3. Use the Ultraviz system tray icon or UI to open the Ultrahaptics process you wish to monitor.
 ```
 $ python3 UHSDKLogViewer.py -e=/path/to/my/process
 ```
 
-Alternatively, run the compiled applications in the [Executables](https://github.com/ultrahaptics/ultrahaptics-labs/tree/master/UHSDKLogViewer/Executables) directory (Mac and Windows only)
+Alternatively, run the compiled applications in the [Executables](https://github.com/ultrahaptics/ultrahaptics-labs/tree/master/Ultraviz/Executables) directory (Mac and Windows only)
 
 Dependencies:
 -------------
@@ -40,10 +41,10 @@ $ pip3 install pyinstaller
 Then to build, cd into the src/ directory and run:
 ```
 macOS:
-$ pyinstaller -F -w UHSDKLogViewer.py -i ../icons/icon.icns
+$ pyinstaller -F -w Ultraviz.py -i ../icons/icon.icns
 
 Windows:
-$ pyinstaller.exe -F -w UHSDKLogViewer.py -i ../icons/icon.ico
+$ pyinstaller.exe -F -w Ultraviz.py -i ../icons/icon.ico
 
 ```
 

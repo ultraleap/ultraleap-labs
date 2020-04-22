@@ -1,7 +1,3 @@
-<p align="center">
-	<img width="320px" src="https://ultraleap.com/wp-content/uploads/2018/05/ultraleap-RGB-WEB-ONLY-1.png"/>
-</p>
-
 # Mid-Air Haptic Texture: Modulating Sensation Intensity from Image Displacement Maps
 This textures open-source project is part of an internal research project exploring the possibility of rendering varying surface textures using a UH device. This work currently enables the generation of haptic textures from images by modulating haptic sensation intensity via image displacement map greyscale values. From this information, the roughness and bumpiness of a texture can be effectively presented using ultrasonic mid-air haptics. In addition, both visual and haptic feedback are directly linked which ensures congruency for the user whilst exploring a visuo-haptic texture.
 
@@ -94,4 +90,5 @@ This project is open-sourced under the Apache V2 license. The textures used with
 ## Support, Contact & Contribution
 For any questions regarding this project, please contact david.beattie@ultraleap.com. Alternatively, please branch this repo and leave comments so we can keep up to date with any requests and issues.
 
-Thanks!
+## Acknowledgements
+This project has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreement No 801413, H-Reality.

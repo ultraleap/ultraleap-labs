@@ -41,7 +41,7 @@ except Exception as e:
     if IS_WINDOWS:
         print("*** WARNING: Unable to import dependencies. Please install via:\n\n pip3 install --user pyqt5 pyqtgraph numpy PyOpenGL atom SimpleWebSocketServer qtmodern pywin32\n")
     else:
-        print("*** WARNING: Unable to import dependencies. Please install via:\n\n pip3 install --user pyqt5 pyqtgraph numpy PyOpenGL atom SimpleWebSocketServe qtmodern\n")
+        print("*** WARNING: Unable to import dependencies. Please install via:\n\n pip3 install --user pyqt5 pyqtgraph numpy PyOpenGL atom SimpleWebSocketServer qtmodern\n")
 
 # For Qt qrc file loading of resources
 import resources
@@ -49,10 +49,6 @@ import resources
 class MainWindow(QMainWindow):
     def __init__(self, exe_path=None, auto_launch=True, parent = None):
         super(MainWindow, self).__init__(parent)
-
-        if exe_path:
-            print("An executable process was provided: %s" % exe_path)
-            self.exePath = exe_path
 
         self.log_reader_thread = None
         self.executable_process = None
@@ -128,9 +124,15 @@ class MainWindow(QMainWindow):
         self.setEnvironmentForLogging()
         self.startPollingLogReaderThread()
 
-        # Optionally launch an executable on launch of the dialog
-        if auto_launch:
-            self.launchExecutable()
+
+        if exe_path:
+            print("An executable process was provided: %s" % exe_path)
+            self.exePath = exe_path
+            self.bookmarkListWidget.addItem(self.exePath)
+
+            # Optionally launch an executable on launch of the dialog
+            if auto_launch:
+                self.launchExecutable()
 
         # Setup the bookmarks list
         self.updateBookmarkList()
@@ -347,7 +349,7 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(usage="-e <executable path> -a <add to automatically launch the executable>")
     parser.add_argument('-e', '--exePath', required=False, help='The executable process to lauch. If specified, the specified executable will be launched and monitored.')
-    parser.add_argument('-a', '--autoLaunch', action="store_true", default=False, required=False, help='If specified, will automatically launch the specified executable on launch.')
+    parser.add_argument('-a', '--autoLaunch', action="store_true", default=True, required=False, help='If specified, will automatically launch the specified executable on launch.')
     args = parser.parse_args()
 
     exePath = args.exePath

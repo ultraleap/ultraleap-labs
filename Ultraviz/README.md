@@ -12,7 +12,7 @@ Usage:
 2. Run with -e (--exePath) flag from the command line, to launch an Ultrahaptics executable you wish to monitor
 3. Use the Ultraviz system tray icon or UI to open the Ultrahaptics process you wish to monitor.
 ```
-$ python3 UHSDKLogViewer.py -e=/path/to/my/process
+$ python3 Ultraviz.py -e=/path/to/my/process
 ```
 
 Alternatively, run the compiled applications in the [Executables](https://github.com/ultrahaptics/ultrahaptics-labs/tree/master/Ultraviz/Executables) directory (Mac and Windows only)
@@ -20,11 +20,11 @@ Alternatively, run the compiled applications in the [Executables](https://github
 Dependencies:
 -------------
 1. Python 3.7.x (http://python.org)
-2. The following Python modules are required: pyqt5, pyqtgraph, numpy, PyOpenGL, atom, SimpleWebSocketServe, qtmodern
+2. The following Python modules are required: pyqt5, pyqtgraph, numpy, PyOpenGL, atom, SimpleWebSocketServer, qtmodern
   The recommended way to install these via pip (for Python 3)
   To install with pip3 run this command:
 ```
-$ pip3 install --user pyqt5 pyqtgraph numpy PyOpenGL atom SimpleWebSocketServe qtmodern
+$ pip3 install --user pyqt5 pyqtgraph numpy PyOpenGL atom SimpleWebSocketServer qtmodern
 ```
 3. Windows only will also require: 
 ```
